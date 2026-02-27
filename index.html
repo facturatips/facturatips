@@ -352,6 +352,7 @@ zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
 zone.addEventListener('drop', () => zone.classList.remove('dragover'));
 
 function submitForm(e, type) {
+function submitForm(e, type) {
   e.preventDefault();
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwGkZ5B3jdOkK783h9YZF9WoHr2Zk8zdLFkXyW2kWynTO7m-e7CzXLUar0QeCyd0QFWlQ/exec';
   const FORMSPREE_URL = 'https://formspree.io/f/mvzbyblv';
@@ -377,25 +378,6 @@ function submitForm(e, type) {
 
   const titles = { mudanza: '¡Mudanza en marcha! 📦', factura: '¡Factura recibida y en análisis! 📄' };
   const texts = { mudanza: 'Te contactamos en menos de 24h para gestionar todos tus contratos.', factura: 'Analizamos tu factura y te llamamos con cifras concretas. 💡' };
-  document.querySelector('.form-toggle').style.display = 'none';
-  form.style.display = 'none';
-  document.getElementById('successTitle').textContent = titles[type];
-  document.getElementById('successText').textContent = texts[type];
-  document.getElementById('successMsg').style.display = 'block';
-}
-  const form = e.target;
-  const formData = new FormData(form);
-  const obj = {};
-  formData.forEach((value, key) => obj[key] = value);
-console.log(JSON.stringify(obj));
-  const img = new Image();
-const params = new URLSearchParams();
-params.append('data', JSON.stringify(obj));
-fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });;
-
-  const titles = { mudanza: '¡Mudanza en marcha! 📦', factura: '¡Factura recibida y en análisis! 📄' };
-  const texts = { mudanza: 'Te contactamos en menos de 24h para gestionar todos tus contratos.', factura: 'Analizamos tu factura y te llamamos con cifras concretas. 💡' };
-
   document.querySelector('.form-toggle').style.display = 'none';
   form.style.display = 'none';
   document.getElementById('successTitle').textContent = titles[type];

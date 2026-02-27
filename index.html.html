@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FacturaTips | Ahorra en tu hogar</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #00C896;
+    --verde-dark: #00A87E;
+    --azul: #0A1628;
+    --azul-mid: #112240;
+    --blanco: #F8FBF9;
+    --gris: #8A9BAE;
+    --accent: #FFD166;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--azul); color: var(--blanco); overflow-x: hidden; }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 24px 80px; position: relative;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,200,150,0.13) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,168,126,0.08) 0%, transparent 60%), var(--azul);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(0,200,150,0.06) 1px, transparent 1px);
+    background-size: 32px 32px; pointer-events: none;
+  }
+
+  .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--verde); letter-spacing: -0.5px; margin-bottom: 48px; position: relative; z-index: 1; }
+  .logo span { color: var(--blanco); }
+
+  .badge-bienvenido {
+    display: none; background: rgba(0,200,150,0.12); border: 1px solid rgba(0,200,150,0.3);
+    color: var(--verde); padding: 10px 20px; border-radius: 50px; font-size: 0.9rem;
+    font-weight: 500; margin-bottom: 24px; position: relative; z-index: 1;
+    animation: fadeDown 0.5s ease;
+  }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.1; letter-spacing: -1.5px;
+    max-width: 800px; position: relative; z-index: 1; margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--verde); }
+
+  .hero p.sub {
+    font-size: clamp(1rem, 2vw, 1.2rem); color: var(--gris); max-width: 560px;
+    line-height: 1.7; margin-bottom: 48px; position: relative; z-index: 1; font-weight: 300;
+  }
+
+  .tunnel-selector {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    max-width: 680px; width: 100%; position: relative; z-index: 1; margin-bottom: 48px;
+  }
+  .tunnel-card {
+    background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 28px 20px; cursor: pointer; transition: all 0.25s;
+    text-align: center; text-decoration: none; color: var(--blanco); display: block;
+  }
+  .tunnel-card:hover, .tunnel-card.active {
+    border-color: var(--verde); background: rgba(0,200,150,0.08);
+    transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,200,150,0.15);
+  }
+  .tunnel-card.accent-card:hover, .tunnel-card.accent-card.active {
+    border-color: var(--accent); background: rgba(255,209,102,0.08);
+    box-shadow: 0 16px 40px rgba(255,209,102,0.15);
+  }
+  .tunnel-icon { font-size: 2rem; margin-bottom: 12px; }
+  .tunnel-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+  .tunnel-card p { font-size: 0.82rem; color: var(--gris); line-height: 1.5; }
+
+  .stats-bar {
+    display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
+    position: relative; z-index: 1; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.07); width: 100%; max-width: 700px;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--verde); }
+  .stat-label { font-size: 0.8rem; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .logos-section { padding: 48px 24px; text-align: center; background: var(--azul-mid); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .logos-section p { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gris); margin-bottom: 28px; }
+  .logos-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .logo-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+
+  .section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px; color: var(--verde); margin-bottom: 16px; display: block; }
+  .section-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.5rem); letter-spacing: -1px; margin-bottom: 48px; max-width: 600px; }
+
+  .how { padding: 80px 24px; max-width: 900px; margin: 0 auto; text-align: center; }
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 48px; }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .step-num { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--verde); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--verde); }
+  .step h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+  .step p { font-size: 0.9rem; color: var(--gris); line-height: 1.6; font-weight: 300; }
+
+  .form-section { padding: 80px 24px; background: var(--azul-mid); border-top: 1px solid rgba(255,255,255,0.05); }
+  .form-inner { max-width: 660px; margin: 0 auto; text-align: center; }
+
+  .form-toggle { display: flex; background: rgba(255,255,255,0.05); border-radius: 14px; padding: 5px; margin-bottom: 36px; gap: 4px; }
+  .form-toggle-btn { flex: 1; padding: 13px 10px; border-radius: 10px; border: none; background: transparent; color: var(--gris); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; line-height: 1.3; }
+  .form-toggle-btn.active { background: var(--verde); color: var(--azul); }
+  .form-toggle-btn.active.accent { background: var(--accent); }
+
+  form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  input, select { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; color: var(--blanco); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+  input::placeholder { color: var(--gris); }
+  input:focus, select:focus { border-color: var(--verde); background: rgba(0,200,150,0.05); }
+  select option { background: var(--azul-mid); color: var(--blanco); }
+
+  .upload-label { font-size: 0.85rem; color: var(--gris); margin-bottom: 8px; display: block; font-weight: 500; }
+  .upload-zone {
+    border: 2px dashed rgba(255,255,255,0.15); border-radius: 16px; padding: 32px 20px;
+    text-align: center; cursor: pointer; transition: all 0.25s; position: relative;
+    background: rgba(255,255,255,0.02);
+  }
+  .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: rgba(255,209,102,0.05); }
+  .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; padding: 0; border: none; background: transparent; }
+  .upload-icon { font-size: 2rem; margin-bottom: 10px; }
+  .upload-zone p { color: var(--gris); font-size: 0.9rem; line-height: 1.5; margin: 0; }
+  .upload-zone strong { color: var(--accent); font-family: 'Syne', sans-serif; }
+  .upload-filename { display: none; margin-top: 10px; color: var(--verde); font-size: 0.85rem; font-weight: 600; }
+  .upload-tip { background: rgba(255,209,102,0.08); border: 1px solid rgba(255,209,102,0.2); border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: rgba(255,255,255,0.7); line-height: 1.5; text-align: left; margin-top: 10px; }
+  .upload-tip strong { color: var(--accent); }
+
+  .form-submit { background: var(--verde); color: var(--azul); padding: 18px; border-radius: 50px; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; margin-top: 8px; width: 100%; }
+  .form-submit:hover { background: var(--verde-dark); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,200,150,0.3); }
+  .form-submit.accent-submit { background: var(--accent); color: var(--azul); }
+  .form-submit.accent-submit:hover { background: #f0c040; box-shadow: 0 12px 32px rgba(255,209,102,0.3); }
+
+  .form-reassurance { text-align: center; font-size: 0.8rem; color: var(--gris); margin-top: 12px; }
+  .form-reassurance span { margin: 0 6px; }
+
+  .success-msg { display: none; background: rgba(0,200,150,0.1); border: 1px solid rgba(0,200,150,0.3); border-radius: 16px; padding: 40px 32px; text-align: center; }
+  .success-msg h3 { font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--verde); margin-bottom: 10px; }
+  .success-msg p { color: var(--gris); line-height: 1.6; }
+
+  footer { padding: 40px 24px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); color: var(--gris); font-size: 0.8rem; }
+  footer strong { color: var(--verde); font-family: 'Syne', sans-serif; }
+
+  @media (max-width: 600px) {
+    .tunnel-selector { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .stats-bar { gap: 28px; }
+  }
+
+  .fade-in { opacity: 0; transform: translateY(24px); animation: fadeIn 0.7s ease forwards; }
+  @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+  .fade-in:nth-child(1) { animation-delay: 0.1s; }
+  .fade-in:nth-child(2) { animation-delay: 0.2s; }
+  .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .fade-in:nth-child(4) { animation-delay: 0.4s; }
+  .fade-in:nth-child(5) { animation-delay: 0.5s; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="logo fade-in">Factura<span>Tips</span></div>
+  <div class="badge-bienvenido" id="bienvenidoBadge"></div>
+  <h1 class="fade-in">¿Estás pagando <em>de más</em> en tu hogar?</h1>
+  <p class="sub fade-in">Tanto si te mudas como si llevas años en tu piso — te ayudamos a pagar menos en luz, gas, alarma e Internet. Gratis. Con un asesor real.</p>
+
+  <div class="tunnel-selector fade-in">
+    <a href="#formulario" class="tunnel-card" onclick="activateTunnel('mudanza', this)">
+      <div class="tunnel-icon">📦</div>
+      <h3>Me voy a mudar</h3>
+      <p>Transfiero todos mis contratos antes de llegar a mi nuevo hogar</p>
+    </a>
+    <a href="#formulario" class="tunnel-card accent-card" onclick="activateTunnel('factura', this)">
+      <div class="tunnel-icon">📄</div>
+      <h3>Quiero bajar mi factura</h3>
+      <p>Subo mi factura y encuentro una oferta mejor ahora mismo</p>
+    </a>
+  </div>
+
+  <div class="stats-bar fade-in">
+    <div class="stat"><div class="stat-num">1</div><div class="stat-label">sola llamada</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Gratuito</div></div>
+    <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Respuesta</div></div>
+    <div class="stat"><div class="stat-num">5★</div><div class="stat-label">Asesor real</div></div>
+  </div>
+</section>
+
+<div class="logos-section">
+  <p>Trabajamos con las mejores marcas</p>
+  <div class="logos-grid">
+    <div class="logo-pill">🔒 Securitas Direct</div>
+    <div class="logo-pill">⚡ Endesa</div>
+    <div class="logo-pill">🌿 Plenitude</div>
+    <div class="logo-pill">🔥 Alhambra Energía</div>
+    <div class="logo-pill">💡 Gana Energía</div>
+    <div class="logo-pill">📡 Movistar</div>
+    <div class="logo-pill">📶 Vodafone</div>
+    <div class="logo-pill">🟠 Orange</div>
+    <div class="logo-pill">📱 MásMóvil</div>
+  </div>
+</div>
+
+<section class="how">
+  <span class="section-label">Cómo funciona</span>
+  <h2 class="section-title" style="margin: 0 auto; text-align:center;">Simple. Rápido. Gratis.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Rellena el formulario</h4>
+      <p>Tu nombre, teléfono y — si quieres ahorrar — sube tu factura. 60 segundos.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Analizamos tu situación</h4>
+      <p>Revisamos tu factura y preparamos una oferta concreta antes de llamarte.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Te llamamos con cifras reales</h4>
+      <p>"Pagas 94€/mes, podemos bajarlo a 67€." Sin rodeos, sin pérdida de tiempo.</p>
+    </div>
+  </div>
+</section>
+
+<section class="form-section" id="formulario">
+  <div class="form-inner">
+    <span class="section-label">Solicitud gratuita</span>
+    <h2 class="section-title" style="max-width:100%; text-align:center;">Tu asesor te espera 👇</h2>
+
+    <div class="form-toggle">
+      <button class="form-toggle-btn active" id="btnMudanza" onclick="switchForm('mudanza')">📦 Me voy a mudar</button>
+      <button class="form-toggle-btn accent" id="btnFactura" onclick="switchForm('factura')">📄 Quiero bajar mi factura</button>
+    </div>
+
+    <!-- MUDANZA -->
+    <form id="formMudanza" onsubmit="submitForm(event,'mudanza')">
+      <input type="hidden" name="source" id="sourceMudanza" value="direct">
+      <input type="hidden" name="tunnel" value="Mudanza">
+      <div class="form-row">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+      </div>
+      <input type="tel" name="telefono" placeholder="Teléfono" required>
+      <input type="email" name="email" placeholder="Email (opcional)">
+      <div class="form-row">
+        <input type="text" name="ciudad_actual" placeholder="Ciudad actual" required>
+        <input type="text" name="ciudad_nueva" placeholder="Ciudad nueva" required>
+      </div>
+      <input type="date" name="fecha_mudanza" required>
+      <select name="servicios">
+        <option value="" disabled selected>¿Qué servicios necesitas?</option>
+        <option>Luz + Gas</option>
+        <option>Luz + Gas + Alarma</option>
+        <option>Luz + Gas + Alarma + Internet</option>
+        <option>Solo Alarma</option>
+        <option>Solo Internet</option>
+      </select>
+      <button type="submit" class="form-submit">Gestionar mi mudanza gratis →</button>
+      <p class="form-reassurance"><span>✓ Sin compromiso</span><span>✓ 100% gratuito</span><span>✓ Respuesta en 24h</span></p>
+    </form>
+
+    <!-- BAJAR FACTURA -->
+    <form id="formFactura" onsubmit="submitForm(event,'factura')" style="display:none;">
+      <input type="hidden" name="source" id="sourceFactura" value="direct">
+      <input type="hidden" name="tunnel" value="Bajar Factura">
+      <div class="form-row">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+      </div>
+      <input type="tel" name="telefono" placeholder="Teléfono" required>
+      <input type="email" name="email" placeholder="Email (opcional)">
+      <input type="text" name="ciudad" placeholder="Tu ciudad" required>
+      <div>
+        <span class="upload-label">📄 Sube tu última factura (obligatorio)</span>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" name="factura" id="facturaFile" accept=".pdf,.jpg,.jpeg,.png,.webp" required onchange="showFilename(this)">
+          <div class="upload-icon">⬆️</div>
+          <p><strong>Haz clic o arrastra tu factura aquí</strong><br>PDF, foto JPG o PNG · máx. 10MB</p>
+          <div class="upload-filename" id="uploadFilename"></div>
+        </div>
+        <div class="upload-tip">💡 <strong>¿Por qué subir tu factura?</strong> Te llamamos con cifras reales — cuánto pagas ahora vs cuánto podrías pagar. Sin adivinar, sin perder tiempo.</div>
+      </div>
+      <button type="submit" class="form-submit accent-submit">Analizar mi factura gratis →</button>
+      <p class="form-reassurance"><span>✓ Sin compromiso</span><span>✓ 100% gratuito</span><span>✓ Te llamamos con cifras reales</span></p>
+    </form>
+
+    <div class="success-msg" id="successMsg">
+      <div style="font-size:3rem; margin-bottom:16px;">✅</div>
+      <h3 id="successTitle">¡Solicitud recibida!</h3>
+      <p id="successText">Te llamamos en menos de 24h. ¡Gracias por confiar en FacturaTips!</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>FacturaTips</strong> · Ahorra en tu hogar · Asesor real, sin compromiso<br>
+  <span style="margin-top:8px; display:block;">© 2025 FacturaTips. Todos los derechos reservados.</span>
+</footer>
+
+<script>
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const source = params.get('source') || 'direct';
+  document.getElementById('sourceMudanza').value = source;
+  document.getElementById('sourceFactura').value = source;
+  const agencyNames = { 'remaxbarcelona':'RE/MAX Barcelona','remaxmadrid':'RE/MAX Madrid','inmocosta':'InmoCosta','engel':'Engel & Völkers' };
+  if (agencyNames[source]) {
+    const b = document.getElementById('bienvenidoBadge');
+    b.textContent = '🤝 Bienvenido cliente de ' + agencyNames[source];
+    b.style.display = 'inline-block';
+  }
+  if (params.get('tunnel') === 'factura') switchForm('factura');
+})();
+
+function activateTunnel(type, el) {
+  document.querySelectorAll('.tunnel-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  setTimeout(() => switchForm(type), 300);
+}
+
+function switchForm(type) {
+  const bM = document.getElementById('btnMudanza');
+  const bF = document.getElementById('btnFactura');
+  const fM = document.getElementById('formMudanza');
+  const fF = document.getElementById('formFactura');
+  if (type === 'mudanza') {
+    bM.classList.add('active'); bF.classList.remove('active');
+    fM.style.display = 'flex'; fF.style.display = 'none';
+  } else {
+    bF.classList.add('active'); bM.classList.remove('active');
+    fF.style.display = 'flex'; fM.style.display = 'none';
+  }
+}
+
+function showFilename(input) {
+  const el = document.getElementById('uploadFilename');
+  if (input.files && input.files[0]) {
+    el.textContent = '✓ ' + input.files[0].name;
+    el.style.display = 'block';
+    const zone = document.getElementById('uploadZone');
+    zone.style.borderColor = 'var(--verde)';
+    zone.style.background = 'rgba(0,200,150,0.05)';
+  }
+}
+
+const zone = document.getElementById('uploadZone');
+zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+zone.addEventListener('drop', () => zone.classList.remove('dragover'));
+
+function submitForm(e, type) {
+  e.preventDefault();
+  const SHEET_URL = 'REMPLACER_PAR_TON_GOOGLE_APPS_SCRIPT_URL';
+  fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body: new FormData(e.target) }).catch(() => {});
+  const titles = { mudanza: '¡Mudanza en marcha! 📦', factura: '¡Factura recibida y en análisis! 📄' };
+  const texts = { mudanza: 'Te contactamos en menos de 24h para gestionar todos tus contratos. ¡Que vaya bien la mudanza!', factura: 'Analizamos tu factura y te llamamos con cifras concretas. Prepárate para ahorrar 💡' };
+  document.querySelector('.form-toggle').style.display = 'none';
+  e.target.style.display = 'none';
+  document.getElementById('successTitle').textContent = titles[type];
+  document.getElementById('successText').textContent = texts[type];
+  document.getElementById('successMsg').style.display = 'block';
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>

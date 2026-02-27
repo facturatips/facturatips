@@ -361,7 +361,9 @@ function submitForm(e, type) {
   formData.forEach((value, key) => obj[key] = value);
 
   const img = new Image();
-  img.src = SHEET_URL + '?data=' + encodeURIComponent(JSON.stringify(obj));
+const params = new URLSearchParams();
+params.append('data', JSON.stringify(obj));
+fetch(SHEET_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });;
 
   const titles = { mudanza: '¡Mudanza en marcha! 📦', factura: '¡Factura recibida y en análisis! 📄' };
   const texts = { mudanza: 'Te contactamos en menos de 24h para gestionar todos tus contratos.', factura: 'Analizamos tu factura y te llamamos con cifras concretas. 💡' };
